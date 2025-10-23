@@ -1,7 +1,7 @@
 package main
 
-import "go.mod/internal/storage"
+import "go.mod/cmd"
 
 func main() {
-	storage.LoadExpense(storage.FileName)
+	cmd.Run()
 }

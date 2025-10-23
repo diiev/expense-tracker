@@ -10,19 +10,19 @@ import (
 
 const FileName = "data/expense.json"
 
-func LoadExpense(filename string) ([]*model.Expense, error) {
-	if _, err := os.Stat(filename); os.IsNotExist(err) {
+func LoadExpense() ([]*model.Expense, error) {
+	if _, err := os.Stat(FileName); os.IsNotExist(err) {
 		empty := []*model.Expense{}
 		data, err := json.MarshalIndent(empty, "", " ")
 		if err != nil {
 			return nil, fmt.Errorf("Ошибка сериализации %w", err)
 		}
-		if err := os.WriteFile(filename, data, 0644); err != nil {
+		if err := os.WriteFile(FileName, data, 0644); err != nil {
 			return nil, fmt.Errorf("Ошибка создания файла %w", err)
 		}
 		return empty, nil
 	}
-	data, err := os.ReadFile(filename)
+	data, err := os.ReadFile(FileName)
 	if err != nil {
 		return nil, fmt.Errorf("Ошибка чтения файла: %w", err)
 	}
