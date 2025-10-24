@@ -21,6 +21,11 @@ func Run() {
 		amount, _ := strconv.Atoi(os.Args[2])
 		amountf := float64(amount)
 		cli.AddExpense(amountf, os.Args[3], os.Args[4])
+	case "delete":
+		id, _ := strconv.Atoi(os.Args[2])
+		cli.DeleteExpense(id)
+	case "summary":
+		cli.SummaryExp(8)
 	}
 
 }
