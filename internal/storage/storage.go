@@ -10,6 +10,7 @@ import (
 
 const FileName = "data/expense.json"
 
+// Загружает расходы из файла, если нет файла создает его
 func LoadExpense() ([]*model.Expense, error) {
 	if _, err := os.Stat(FileName); os.IsNotExist(err) {
 		empty := []*model.Expense{}
@@ -34,4 +35,33 @@ func LoadExpense() ([]*model.Expense, error) {
 		return nil, fmt.Errorf("Ошибка десереиализации файла %w", err)
 	}
 	return expenses, nil
+}
+
+// Cохраняет изменения в файл
+
+func SaveExpenses(expenses []*model.Expense) error {
+	data, err := json.MarshalIndent(expenses, "", " ")
+	if err != nil {
+		return fmt.Errorf("Ошибка записи данных %w", err)
+	}
+	tmpFile := FileName + ".tmp"
+	f, err := os.Create(tmpFile)
+	if err != nil {
+		return fmt.Errorf("Ошибка создания файла %w", err)
+	}
+	_, err = f.Write(data)
+	if err != nil {
+		f.Close()
+		return fmt.Errorf("Ошибка записи данных в файл %w", err)
+	}
+	if err := f.Close(); err != nil {
+		return fmt.Errorf("Ошбика закрытия файла %w", err)
+	}
+	if err := os.Rename(tmpFile, FileName); err != nil {
+		return fmt.Errorf("Ошибка переименования файла")
+	}
+	defer func() {
+		f.Close()
+	}()
+	return nil
 }
