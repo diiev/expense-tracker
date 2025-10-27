@@ -24,7 +24,7 @@ func DeleteExpense(id int) error {
 	if err := storage.SaveExpenses(newExp); err != nil {
 		return fmt.Errorf("Ошибка сохранения файла %w", err)
 	}
-	if !found {
+	if found {
 		fmt.Printf("Расход с id %d удален\n", id)
 	} else {
 		fmt.Printf("Расход с id %d не найден\n", id)

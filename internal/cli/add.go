@@ -7,7 +7,7 @@ import (
 	"go.mod/internal/storage"
 )
 
-func AddExpense(amount float64, category string, description string) error {
+func AddExpense(category string, description string, amount float64) error {
 
 	if description == "" || category == "" {
 		return fmt.Errorf("Описание,категория не может быть пустым")
@@ -30,6 +30,6 @@ func AddExpense(amount float64, category string, description string) error {
 	if err := storage.SaveExpenses(exp); err != nil {
 		return fmt.Errorf("Ошибка сохранения файла %w", err)
 	}
-	fmt.Printf("Расход успешно добавлен (ID: %d)", newID)
+	fmt.Printf("Расход успешно добавлен (ID: %d)\n", newID)
 	return nil
 }

@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"time"
 
 	"go.mod/internal/storage"
 )
@@ -30,8 +31,15 @@ func SummaryExp(month int) error {
 	}
 	var summary float64
 	for _, e := range exp {
-		summary += e.Amount
+		if e.Date.Month() == time.Month(month) && e.Date.Year() == time.Now().Year() || month == 0 {
+			summary += e.Amount
+		}
+
 	}
-	fmt.Printf("Общий расход за %s месяц равен %.2f руб.\n", getMonthString(month), summary)
+	if month == 0 {
+		fmt.Printf("Общий расход за все время равен %.2f руб.\n", summary)
+	} else {
+		fmt.Printf("Общий расход за %s месяц равен %.2f руб.\n", getMonthString(month), summary)
+	}
 	return nil
 }

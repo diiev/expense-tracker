@@ -21,13 +21,12 @@ func ShowExpense(category string) error {
 	}
 	for _, t := range filtered {
 		if t != nil {
-			fmt.Println("-------------------------------")
-			fmt.Printf("Номер задачи: %d\nОписание: %s\nСтатус: %s\nСоздана: %s\nОбновлено: %s\n",
-				t.ID, t.Description, t.Category, t.Date.Format("2006-01-02 15:04"), t.Amount)
+			fmt.Printf("%d  |\t%s |\t%s\t  |\t%s\t\t|\t%.2f руб.\t|\n", t.ID, t.Date.Format("2006-02-01"), t.Category, t.Description, t.Amount)
 		}
 	}
 	if len(filtered) == 0 {
 		fmt.Println("Задачи не найдены")
 	}
+
 	return nil
 }
