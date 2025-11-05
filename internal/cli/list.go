@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"strings"
 
 	"go.mod/internal/model"
 	"go.mod/internal/storage"
@@ -17,13 +18,25 @@ func ShowExpense(category string) error {
 		if category == "" {
 			filtered = append(filtered, e)
 		}
+		if category == e.Category {
+			filtered = append(filtered, e)
+		}
 
 	}
+	fmt.Printf("%-4s | %-12s | %-15s | %-20s | %-15s |\n", "ID", "Дата", "Категория", "Описание", "Сумма")
+	fmt.Println(strings.Repeat("-", 75))
+
 	for _, t := range filtered {
 		if t != nil {
-			fmt.Printf("%d  |\t%s |\t%s\t  |\t%s\t\t|\t%.2f руб.\t|\n", t.ID, t.Date.Format("2006-02-01"), t.Category, t.Description, t.Amount)
+			fmt.Printf("%-4d | %-12s | %-15s | %-20s | %-10.2f руб. |\n",
+				t.ID,
+				t.Date.Format("2006-01-02"),
+				t.Category,
+				t.Description,
+				t.Amount)
 		}
 	}
+
 	if len(filtered) == 0 {
 		fmt.Println("Задачи не найдены")
 	}

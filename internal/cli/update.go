@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"time"
 
 	"go.mod/internal/storage"
 )
@@ -27,7 +28,7 @@ func UpdateExp(id int, category string, description string, amount float64) erro
 			if amount > 0 {
 				e.Amount = amount
 			}
-
+			e.UpdatedAt = time.Now()
 			break
 		}
 	}

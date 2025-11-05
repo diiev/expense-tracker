@@ -39,7 +39,19 @@ func SummaryExp(month int) error {
 	if month == 0 {
 		fmt.Printf("Общий расход за все время равен %.2f руб.\n", summary)
 	} else {
+
 		fmt.Printf("Общий расход за %s месяц равен %.2f руб.\n", getMonthString(month), summary)
 	}
+
+	budget, _ := storage.LoadBudget()
+	if budget.Month == month && budget.Amount > 0 {
+		fmt.Printf("💰 Бюджет: %.2f руб.\n", budget.Amount)
+		if summary > budget.Amount {
+			fmt.Printf("⚠️  Превышение бюджета на %.2f руб.\n", summary-budget.Amount)
+		} else {
+			fmt.Printf("Остаток бюджета: %.2f руб.\n", budget.Amount-summary)
+		}
+	}
+
 	return nil
 }
