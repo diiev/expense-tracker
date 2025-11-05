@@ -7,34 +7,40 @@ import (
 )
 
 func UpdateExp(id int, category string, description string, amount float64) error {
-	exp, err := storage.LoadExpense()
+	expenses, err := storage.LoadExpense()
 	if err != nil {
-		return fmt.Errorf("Ошибка загрузки данных")
+		return fmt.Errorf("ошибка загрузки данных: %w", err)
 	}
+
 	found := false
 
-	// var newExp []*model.Expense
-	for _, e := range exp {
+	for _, e := range expenses {
 		if e.ID == id {
 			found = true
-			if category != "" && description != "" && amount > 0 {
+
+			if category != "" {
 				e.Category = category
+			}
+			if description != "" {
 				e.Description = description
+			}
+			if amount > 0 {
 				e.Amount = amount
 			}
-			if category == "" && description == "" {
-				e.Amount = amount
-			}
+
+			break
 		}
 	}
-	if err := storage.SaveExpenses(exp); err != nil {
-		return fmt.Errorf("Ошибка сохранения данных %w", err)
 
-	}
-	if found {
-		fmt.Printf("Запись с ID-%d есть, выберите что хотите поменять?\n1-Категорию\n2-Описание\n3-Сумму\n", id)
-	} else {
+	if !found {
 		fmt.Printf("Запись с ID-%d не найдена\n", id)
+		return nil
 	}
+
+	if err := storage.SaveExpenses(expenses); err != nil {
+		return fmt.Errorf("ошибка сохранения данных: %w", err)
+	}
+
+	fmt.Printf("Запись с ID-%d успешно обновлена\n", id)
 	return nil
 }

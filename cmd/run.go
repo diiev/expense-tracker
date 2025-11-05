@@ -37,19 +37,47 @@ func Run() {
 			cli.SummaryExp(0)
 		}
 	case "update":
-		id, _ := strconv.Atoi(os.Args[2])
-		if len(os.Args) > 5 && len(os.Args) < 7 {
-			amount, _ := strconv.Atoi(os.Args[5])
-			amountf := float64(amount)
-			cli.UpdateExp(id, os.Args[3], os.Args[4], amountf)
+		if len(os.Args) < 3 {
+			fmt.Println("Использование:\nupdate <id> [category] [description] [amount]\nupdate <id> <amount>\nupdate <id> <category> <description> <amount>\nupdate <id> <category> <amount>")
+			return
 		}
-		fmt.Println(len(os.Args))
-		if len(os.Args) < 5 {
-			amount, _ := strconv.Atoi(os.Args[3])
-			amountf := float64(amount)
-			cli.UpdateExp(id, "", "", amountf)
 
+		id, err := strconv.Atoi(os.Args[2])
+		if err != nil {
+			fmt.Println("Некорректный ID")
+			return
 		}
+
+		var category, description string
+		var amount float64
+
+		// Разбираем аргументы по количеству
+		switch len(os.Args) {
+		case 4:
+			// update <id> <amount>
+			amountInt, _ := strconv.Atoi(os.Args[3])
+			amount = float64(amountInt)
+		case 5:
+			// update <id> <category> <amount>
+			category = os.Args[3]
+			amountInt, _ := strconv.Atoi(os.Args[4])
+			amount = float64(amountInt)
+		case 6:
+			// update <id> <category> <description> <amount>
+			category = os.Args[3]
+			description = os.Args[4]
+			amountInt, _ := strconv.Atoi(os.Args[5])
+			amount = float64(amountInt)
+		default:
+			fmt.Println("Неверное количество аргументов.")
+			fmt.Println("Пример: update 3 Еда Обед 500")
+			return
+		}
+
+		if err := cli.UpdateExp(id, category, description, amount); err != nil {
+			fmt.Println("Ошибка обновления:", err)
+		}
+
 	}
 
 }
